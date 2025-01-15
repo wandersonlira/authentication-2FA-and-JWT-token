@@ -1,0 +1,2 @@
+INSERT INTO `users` (`user_name`, `full_name`, `password`, `account_non_expired`, `account_non_locked`, `credentials_non_expired`, `enabled`) VALUES
+	('lira', 'Wanderson Lira', 'e0648d10b09d5c8c8e6fe25339e15f80065935c9121dcaafaa37e56515f1af719ccee4497c50d349', b'1', b'1', b'1', b'1');

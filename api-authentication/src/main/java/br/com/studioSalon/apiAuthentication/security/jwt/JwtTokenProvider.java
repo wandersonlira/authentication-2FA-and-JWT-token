@@ -1,4 +1,4 @@
-package br.com.studioSalon.apiAuthentication.securityJwt;
+package br.com.studioSalon.apiAuthentication.security.jwt;
 
 import br.com.studioSalon.apiAuthentication.dto.security.TokenDTO;
 import br.com.studioSalon.apiAuthentication.exceptions.InvalidJwtAuthenticationException;
@@ -41,12 +41,23 @@ public class JwtTokenProvider {
     }
 
 
-    public TokenDTO createAccessToken(String userName, List<String> roles) {
+    public TokenDTO createAccessToken(String username, List<String> roles) {
         Date now = new Date();
         Date validity = new Date(now.getTime() + this.validityInMilliseconds);
-        String accessToken = getAccessToken(userName, roles, now, validity);
-        String refreshToken = getRefreshToken(userName, roles, now);
-        return new TokenDTO(userName, true, now, validity, accessToken, refreshToken);
+        String accessToken = getAccessToken(username, roles, now, validity);
+        String refreshToken = getRefreshToken(username, roles, now);
+        return new TokenDTO(username, true, now, validity, accessToken, refreshToken);
+    }
+
+    public TokenDTO refreshToken(String refreshToken) {
+        if (refreshToken.contains("Bearer ")) refreshToken =
+                refreshToken.substring("Bearer ".length());
+
+        JWTVerifier verifier = JWT.require(algorithm).build();
+        DecodedJWT decodedJWT = verifier.verify(refreshToken);
+        String username = decodedJWT.getSubject();
+        List<String> roles = decodedJWT.getClaim("roles").asList(String.class);
+        return createAccessToken(username, roles);
     }
 
     public Authentication getAuthentication(String token) {
@@ -57,8 +68,8 @@ public class JwtTokenProvider {
 
     public String resolveToken(HttpServletRequest httpServletRequest) {
         String bearerToken = httpServletRequest.getHeader("Authorization");
-        if (bearerToken != null && bearerToken.startsWith("Bearer")) {
-            return bearerToken.substring("Bearer".length());
+        if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
+            return bearerToken.substring("Bearer ".length());
         }
         return null;
     }
@@ -74,27 +85,27 @@ public class JwtTokenProvider {
 
 
 
-    private String getAccessToken(String userName, List<String> roles, Date now, Date validity) {
+    private String getAccessToken(String username, List<String> roles, Date now, Date validity) {
         String issuerUrl = ServletUriComponentsBuilder
                 .fromCurrentContextPath().build().toUriString();
         return JWT.create()
                 .withClaim("roles", roles)
                 .withIssuedAt(now)
                 .withExpiresAt(validity)
-                .withSubject(userName)
+                .withSubject(username)
                 .withIssuer(issuerUrl)
                 .sign(algorithm)
                 .strip();
 
     }
 
-    private String getRefreshToken(String userName, List<String> roles, Date now) {
+    private String getRefreshToken(String username, List<String> roles, Date now) {
         Date validityRefreshToken = new Date(now.getTime() + (this.validityInMilliseconds * 3));
         return JWT.create()
                 .withClaim("roles", roles)
                 .withIssuedAt(now)
                 .withExpiresAt(validityRefreshToken)
-                .withSubject(userName)
+                .withSubject(username)
                 .sign(algorithm)
                 .strip();
     }

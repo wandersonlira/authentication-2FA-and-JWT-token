@@ -1,3 +1,15 @@
+# PORT
+server:
+  port: 8088
+
+# SECURITY
+security:
+  jwt:
+    token:
+      secret-key: 53cr37
+      expire-length: 180000 # 3 minutes
+
+# SPRING SERVICE
 spring:
   application:
     name: api-authentication
@@ -8,13 +20,29 @@ spring:
     url: jdbc:mysql://localhost:3306/${DB_DATABASE_NAME}?useTimezone=true&serverTimezone=UTC
     username: ${DB_USER_NAME}
     password: ${DB_USER_PASSWORD}
+    hikari:
+      auto-commit: true
+      isolation-level: CONNECTION  # ou TRANSACTION_READ_COMMITTED
+      minimum-idle: 5
+      maximum-pool-size: 10
+      idle-timeout: 30000
   # JPA, SQL
   jpa:
+    open-in-view: false
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
-      show-sql: true
-server:
-  port: 8088
+      show-sql: false
+
+
+  data:
+    mongodb:
+      uri: mongodb://admin:admin123@localhost:27017/development_salonTech_db?authSource=admin
+
+# LOGGER
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE

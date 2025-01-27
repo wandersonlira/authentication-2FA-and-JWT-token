@@ -35,11 +35,31 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
       show-sql: false
+# EMAIL API INTEGRATIONS
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${USER_EMAIL_GOOGLE}
+    password: ${SECRET_EMAIL_GOOGLE}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 
-
-  data:
-    mongodb:
-      uri: mongodb://admin:admin123@localhost:27017/development_salonTech_db?authSource=admin
+# SMS API INTEGRATIONS
+message:
+  telesign:
+    user: # USER TELESIGN
+      customerId: # YOUR_CUSTOMER_ID
+      apiKey: # YOUR_API_KEY
+    url:
+      sms: https://rest-ww.telesign.com/v1
+  gti:
+    user: trmoura@yahoo.com.br
+    token: YOUR_TOKEN
+    url: https://api.gtisms.com/rest/api
 
 # LOGGER
 logging:

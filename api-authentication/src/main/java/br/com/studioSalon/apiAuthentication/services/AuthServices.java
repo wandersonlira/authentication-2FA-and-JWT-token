@@ -21,6 +21,8 @@ public class AuthServices {
     private JwtTokenProvider jwtTokenProvider;
     @Autowired
     private UserRepository repository;
+    @Autowired
+    private UserCustomerService userCustomerService;
 
 
     @SuppressWarnings("rawtypes")
@@ -42,6 +44,27 @@ public class AuthServices {
             throw new BadCredentialsException("Invalid username/password supplied!");
         }
     }
+
+//// NOVA IMPLEENTAÇÃO
+//    @SuppressWarnings("rawtypes")
+//    public ResponseEntity signin(AccountCredentialsDTO data) {
+//        try {
+//            var username = data.getUsername();
+//            var password = data.getPassword();
+//            authenticationManager.authenticate(
+//                    new UsernamePasswordAuthenticationToken(username, password));
+//            var user = repository.findByUserName(username);
+//            var tokenResponse = new TokenDTO();
+//            if (user != null) {
+//                tokenResponse = jwtTokenProvider.createAccessToken(username, user.getRoles());
+//            } else {
+//                throw new UsernameNotFoundException("Username " + username + "not found!");
+//            }
+//            return ResponseEntity.ok(tokenResponse);
+//        } catch (Exception e) {
+//            throw new BadCredentialsException("Invalid username/password supplied!");
+//        }
+//    }
 
 
     @SuppressWarnings("rawtypes")

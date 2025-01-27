@@ -1,14 +1,18 @@
 package br.com.studioSalon.apiAuthentication;
 
+import org.apache.logging.log4j.util.Base64Util;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.security.crypto.password.DelegatingPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
 
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
+@EnableFeignClients
 @SpringBootApplication
 public class ApiAuthenticationApplication {
 

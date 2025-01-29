@@ -1,0 +1,57 @@
+.send-container {
+    width: 100%;
+    max-width: 1220px;
+    height: 100vh;
+    margin: 0 auto;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.send-container img {
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+
+}
+
+.send-container section {
+    margin-bottom: 200px;
+}
+
+.send-container section.form {
+    width: 100%;
+    max-width: 350px;
+    margin-right: 100px;
+}
+
+.send-container section.form h1 {
+    font-size: 32px;
+    margin-bottom: 32px;
+}
+
+/* Input na caixa de texto */
+
+.input-container {
+    position: relative;
+}
+
+.input-container input {
+    padding-left: 35px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+}
+
+/* Ajuste do cadeado dentro do texto */
+
+.input-container svg {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-10%);
+    color: #0f0101;
+}
+
+

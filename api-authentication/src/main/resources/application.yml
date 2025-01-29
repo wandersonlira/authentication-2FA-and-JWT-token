@@ -6,7 +6,7 @@ server:
 security:
   jwt:
     token:
-      secret-key: 53cr37
+      secret-key: ${SECRET_KEY}
       expire-length: 180000 # 3 minutes
 
 # SPRING SERVICE
@@ -51,15 +51,15 @@ spring:
 # SMS API INTEGRATIONS
 message:
   telesign:
-    user: # USER TELESIGN
-      customerId: # YOUR_CUSTOMER_ID
-      apiKey: # YOUR_API_KEY
+    user:
+      customerId: ${TELESIGN_CUSTOMER_ID}
+      apiKey: ${TELESIGN_APIKEY}
     url:
-      sms: https://rest-ww.telesign.com/v1
+      sms: ${TELESIGN_URL_SMS}
   gti:
-    user: trmoura@yahoo.com.br
-    token: YOUR_TOKEN
-    url: https://api.gtisms.com/rest/api
+    user: ${GTI_EMAIL}
+    token: ${GTI_TOKEN}
+    url: ${GTI_URL}
 
 # LOGGER
 logging:

@@ -3,6 +3,7 @@ package br.com.studioSalon.apiAuthentication.services;
 
 import br.com.studioSalon.apiAuthentication.dto.security.AccountCredentialsDTO;
 import br.com.studioSalon.apiAuthentication.dto.security.TokenDTO;
+import br.com.studioSalon.apiAuthentication.model.UserCustomer;
 import br.com.studioSalon.apiAuthentication.repositories.UserRepository;
 import br.com.studioSalon.apiAuthentication.security.jwt.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,58 +14,26 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.NoSuchElementException;
+
 @Service
 public class AuthServices {
-    @Autowired
-    private AuthenticationManager authenticationManager;
-    @Autowired
-    private JwtTokenProvider jwtTokenProvider;
-    @Autowired
-    private UserRepository repository;
-    @Autowired
-    private UserCustomerService userCustomerService;
+
+    private final AuthenticationManager authenticationManager;
+    private final JwtTokenProvider jwtTokenProvider;
+    private final UserRepository repository;
+    private final UserCustomerService userCustomerService;
 
 
-    @SuppressWarnings("rawtypes")
-    public ResponseEntity signin(AccountCredentialsDTO data) {
-        try {
-            var username = data.getUsername();
-            var password = data.getPassword();
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(username, password));
-            var user = repository.findByUserName(username);
-            var tokenResponse = new TokenDTO();
-            if (user != null) {
-                tokenResponse = jwtTokenProvider.createAccessToken(username, user.getRoles());
-            } else {
-                throw new UsernameNotFoundException("Username " + username + "not found!");
-            }
-            return ResponseEntity.ok(tokenResponse);
-        } catch (Exception e) {
-            throw new BadCredentialsException("Invalid username/password supplied!");
-        }
+    @Autowired
+    public AuthServices(AuthenticationManager authenticationManager, UserCustomerService userCustomerService,
+                        UserRepository repository, JwtTokenProvider jwtTokenProvider) {
+        this.authenticationManager = authenticationManager;
+        this.userCustomerService = userCustomerService;
+        this.repository = repository;
+        this.jwtTokenProvider = jwtTokenProvider;
     }
 
-//// NOVA IMPLEENTAÇÃO
-//    @SuppressWarnings("rawtypes")
-//    public ResponseEntity signin(AccountCredentialsDTO data) {
-//        try {
-//            var username = data.getUsername();
-//            var password = data.getPassword();
-//            authenticationManager.authenticate(
-//                    new UsernamePasswordAuthenticationToken(username, password));
-//            var user = repository.findByUserName(username);
-//            var tokenResponse = new TokenDTO();
-//            if (user != null) {
-//                tokenResponse = jwtTokenProvider.createAccessToken(username, user.getRoles());
-//            } else {
-//                throw new UsernameNotFoundException("Username " + username + "not found!");
-//            }
-//            return ResponseEntity.ok(tokenResponse);
-//        } catch (Exception e) {
-//            throw new BadCredentialsException("Invalid username/password supplied!");
-//        }
-//    }
 
 
     @SuppressWarnings("rawtypes")
@@ -80,4 +49,46 @@ public class AuthServices {
         return ResponseEntity.ok(tokenResponse);
     }
 
+    @SuppressWarnings("rawtypes")
+    public ResponseEntity signin(AccountCredentialsDTO data) {
+        try {
+            var username = data.getUsername();
+            var password = data.getPassword();
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(username, password));
+            var user = repository.findByUserName(username);
+            if (user != null) {
+                userCustomerService.sendCodeUser(user.getUserCustomer().getEmail());
+            } else {
+                throw new UsernameNotFoundException("Username " + username + "not found!");
+            }
+            return ResponseEntity.accepted().build();
+        } catch (Exception e) {
+            throw new BadCredentialsException("Invalid username/password supplied!");
+        }
+    }
+
+    public TokenDTO validateConfirmationCode(String email, String code) {
+        UserCustomer userCustomer = userCustomerService.findUserByEmailAndCode(email, code);
+        var tokenResponse = new TokenDTO();
+        userCustomerService.codeIsValid(userCustomer.getUserConfirmationCode());
+        tokenResponse = this.generateToken(userCustomer.getUser().getUsername());
+        userCustomerService.deleteCode(email, code);
+        return tokenResponse;
+    }
+
+    private TokenDTO generateToken(String username) {
+        try {
+            var user = repository.findByUserName(username);
+            var tokenResponse = new TokenDTO();
+            if (user != null) {
+                tokenResponse = jwtTokenProvider.createAccessToken(username, user.getRoles());
+            } else {
+                throw new UsernameNotFoundException("Username " + username + "not found!");
+            }
+            return tokenResponse;
+        } catch (Exception e) {
+            throw new BadCredentialsException("Invalid username/password supplied!");
+        }
+    }
 }

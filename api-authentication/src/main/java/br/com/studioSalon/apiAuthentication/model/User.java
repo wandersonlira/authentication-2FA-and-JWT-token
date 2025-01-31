@@ -25,6 +25,9 @@ public class User implements UserDetails, Serializable {
     @Column(name = "credentials_non_expired") private Boolean credentialsNonExpired;
     @Column(name = "enabled") private Boolean enabled;
 
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private UserCustomer userCustomer;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_permission", joinColumns = {@JoinColumn(name = "id_user")},
             inverseJoinColumns = {@JoinColumn(name = "id_permission")}
@@ -78,6 +81,7 @@ public class User implements UserDetails, Serializable {
     public boolean isEnabled() {
         return this.enabled;
     }
+
 
 
     public List<Permission> getPermissions() {
@@ -148,6 +152,15 @@ public class User implements UserDetails, Serializable {
         this.id = id;
     }
 
+    public UserCustomer getUserCustomer() {
+        return this.userCustomer;
+    }
+
+    public void setUserCustomer(UserCustomer userCustomer) {
+        this.userCustomer = userCustomer;
+    }
+
+
 
     @Override
     public boolean equals(Object o) {
@@ -155,7 +168,10 @@ public class User implements UserDetails, Serializable {
         if (o == null || getClass() != o.getClass()) return false;
 
         User user = (User) o;
-        return id.equals(user.id) && userName.equals(user.userName) && fullName.equals(user.fullName) && password.equals(user.password) && accountNonExpired.equals(user.accountNonExpired) && accountNonLocked.equals(user.accountNonLocked) && credentialsNonExpired.equals(user.credentialsNonExpired) && enabled.equals(user.enabled) && permissions.equals(user.permissions);
+        return id.equals(user.id) && userName.equals(user.userName) && fullName.equals(user.fullName)
+                && password.equals(user.password) && accountNonExpired.equals(user.accountNonExpired)
+                && accountNonLocked.equals(user.accountNonLocked) && credentialsNonExpired.equals(user.credentialsNonExpired)
+                && enabled.equals(user.enabled) && permissions.equals(user.permissions) && userCustomer.equals(user.userCustomer);
     }
 
     @Override
@@ -169,6 +185,7 @@ public class User implements UserDetails, Serializable {
         result = 31 * result + credentialsNonExpired.hashCode();
         result = 31 * result + enabled.hashCode();
         result = 31 * result + permissions.hashCode();
+        result = 31 * result + userCustomer.hashCode();
         return result;
     }
 }

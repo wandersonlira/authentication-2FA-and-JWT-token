@@ -2,16 +2,10 @@ package br.com.studioSalon.apiAuthentication.controllers;
 
 
 import br.com.studioSalon.apiAuthentication.dto.security.AccountCredentialsDTO;
-import br.com.studioSalon.apiAuthentication.security.jwt.JwtTokenProvider;
 import br.com.studioSalon.apiAuthentication.services.AuthServices;
-import jakarta.servlet.ServletRequest;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -19,8 +13,7 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
     @Autowired
     AuthServices authServices;
-    @Autowired
-    private JwtTokenProvider jwtTokenProvider;  // DEIXEI FINAL
+
 
 
     @SuppressWarnings("rawtypes")
@@ -29,14 +22,25 @@ public class AuthController {
         if (checkIfParamsIsNotNull(data))
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid client request!");
 
-        var token = authServices.signin(data);
-        if (token == null) return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid client request!");
-        return token;
+        var statusCode = authServices.signin(data);
+        if (statusCode.getStatusCode().value() != 202) return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid client request!");
+        return statusCode;
+    }
+
+
+    @GetMapping(value = "/validate")
+    public ResponseEntity<?> validateConfirmationCode4(
+            @RequestParam String email, @RequestParam String code) {
+        var tokenResponse = authServices.validateConfirmationCode(email, code);
+        if (tokenResponse != null) {
+            return ResponseEntity.status(HttpStatus.OK).body(tokenResponse);
+        } else {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("The code has expired, please request another one.");
+        }
     }
 
 
     @SuppressWarnings("rawtypes")
-//    @Operation(summary = "Refresh token for authenticated user and returns a token")
     @PutMapping(value = "/refresh/{username}")
     public ResponseEntity refreshToken(@PathVariable("username") String username,
                                        @RequestHeader("Authorization") String refreshToken) {
@@ -46,20 +50,6 @@ public class AuthController {
         if (token == null) return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid client request!");
         return token;
     }
-
-
-//    @GetMapping(value = "/verify/")
-//    public ResponseEntity<UserDetails> refreshToken(@RequestHeader("Authorization") String token) {
-//        String tokenResponse = jwtTokenProvider.resolveToken2( token);
-//        if (tokenResponse != null && jwtTokenProvider.validateToken(tokenResponse)) {
-//            UserDetails userDetails = jwtTokenProvider.getAUserDetails(tokenResponse);
-//            if (userDetails != null) {
-//                return ResponseEntity.ok().body(userDetails);
-//            }
-//        }
-//        return null;
-//    }
-
 
 
     private boolean checkIfParamsIsNotNull(String username, String refreshToken) {

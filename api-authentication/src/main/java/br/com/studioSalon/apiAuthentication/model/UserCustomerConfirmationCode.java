@@ -32,7 +32,7 @@ public class UserCustomerConfirmationCode implements Serializable {
 
 
     public boolean isValid(){
-        var expirationLimit = creationTime.plusHours(1); // limite de validade de 1 hora
+        var expirationLimit = creationTime.plusMinutes(1); // 1 minute limit
         var currentTime = LocalDateTime.now();
         return currentTime.isBefore(expirationLimit);
 

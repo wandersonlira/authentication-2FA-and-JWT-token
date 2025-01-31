@@ -14,11 +14,13 @@ public class UserCustomer implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) private Long id = null;
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) private Long id;
     @Column(name = "name") private String name;
     @Column(name = "email") private String email;
     @Column(name = "phone_number") private String phoneNumber;
     @Column(name = "active") private String active = "N";
+
+    @OneToOne @JoinColumn(name = "user_token_id") private User user;
 
     @OneToOne(mappedBy = "userCustomer", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private UserCustomerConfirmationCode userConfirmationCode = null;
@@ -72,6 +74,14 @@ public class UserCustomer implements Serializable {
         this.active = active;
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     public UserCustomerConfirmationCode getUserConfirmationCode() {
         return userConfirmationCode;
     }
@@ -87,7 +97,10 @@ public class UserCustomer implements Serializable {
         if (o == null || getClass() != o.getClass()) return false;
 
         UserCustomer that = (UserCustomer) o;
-        return Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(email, that.email) && Objects.equals(phoneNumber, that.phoneNumber) && Objects.equals(active, that.active) && Objects.equals(userConfirmationCode, that.userConfirmationCode);
+        return Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(email, that.email)
+                && Objects.equals(phoneNumber, that.phoneNumber) && Objects.equals(active, that.active)
+                && Objects.equals(userConfirmationCode, that.userConfirmationCode)
+                && Objects.equals(user, that.user);
     }
 
     @Override
@@ -98,6 +111,7 @@ public class UserCustomer implements Serializable {
         result = 31 * result + Objects.hashCode(phoneNumber);
         result = 31 * result + Objects.hashCode(active);
         result = 31 * result + Objects.hashCode(userConfirmationCode);
+        result = 31 * result + Objects.hashCode(user);
         return result;
     }
 

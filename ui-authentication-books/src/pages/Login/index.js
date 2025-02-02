@@ -30,7 +30,7 @@ export default function Login() {
 
             navigate('/auth')
         } catch (error) {
-            alert('Login failed Try again!')
+            alert('Falha no login. Tente novamente!')
         }
         
     }

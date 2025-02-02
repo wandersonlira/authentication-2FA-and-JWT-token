@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -29,9 +30,9 @@ public class AuthController {
 
 
     @GetMapping(value = "/validate")
-    public ResponseEntity<?> validateConfirmationCode4(
-            @RequestParam String email, @RequestParam String code) {
-        var tokenResponse = authServices.validateConfirmationCode(email, code);
+    public ResponseEntity<?> validateConfirmationCode(
+            @RequestParam String username, @RequestParam String code) {
+        var tokenResponse = authServices.validateConfirmationCode(username, code);
         if (tokenResponse != null) {
             return ResponseEntity.status(HttpStatus.OK).body(tokenResponse);
         } else {

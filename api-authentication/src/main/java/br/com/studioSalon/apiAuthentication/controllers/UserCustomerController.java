@@ -6,6 +6,8 @@ import br.com.studioSalon.apiAuthentication.services.UserCustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+
+@CrossOrigin
 @RestController
 @RequestMapping(value = "/auth/2fa/userCustomers")
 public class UserCustomerController {

@@ -7,37 +7,39 @@ import logoAuth from '../../../assets/logoAuth.png';
 
 
 export default function SendCode() {
+
+    const localStorag_username = localStorage.getItem('localStorage_username');
     const [code, setCode] = useState('');
+    const navigate = useNavigate();
 
 
     const handleChange = (event) => {
         const value = event.target.value;
-
         if (/^\d*$/.test(value)) {
             setCode(value);
         }
     };
 
-    const navigate = useNavigate();
 
     async function login(e) {
         e.preventDefault();
-
         const data = {
             code
         };
-
         try {
-            const response = await api.get('/auth/validate', data);
-            localStorage.setItem('username', response.data.username);
+            const response = await api.get('/auth/validate',{
+                params: {
+                    username: localStorag_username,
+                    code: data.code 
+                }          
+            });
+            localStorage.setItem('localStorage_fullName', response.data.fullName);
             localStorage.setItem('accessToken', response.data.accessToken);
-
             navigate('/book')
         } catch (error) {
             alert('Falha no login. Tente novamente!')
         }
-        
-    }
+    };
 
 
     return (

@@ -2,19 +2,17 @@
 > [!NOTE]
 > **Este projeto implementar um sistema de autenticação, combinando autenticação de dois fatores (2FA) com tokens JWT para oferecer um login seguro e eficiente. A arquitetura do sistema envolve tanto a parte backend quanto o frontend, sendo o backend responsável pela geração e validação do token JWT e pela implementação do 2FA, enquanto o frontend, desenvolvido em React.js, lida com a visualização da interface.**
 >
-> **Atualmente, o sistema de autenticação de dois fatores está funcional, sendo realizado através do envio de um código único por e-mail. Contudo, essa funcionalidade de 2FA ainda não foi integrada ao frontend, que no momento está utilizando exclusivamente o token JWT para gerenciar o processo de autenticação e autorização do usuário.**
+> **O sistema de autenticação implementado neste projeto já possui a integração funcional tanto da autenticação de dois fatores (2FA) quanto do token JWT. A autenticação de dois fatores está operacional, sendo realizada por meio do envio de um código único por e-mail, garantindo uma camada adicional de segurança no processo de login. Além disso, o token JWT está sendo gerado com sucesso após o login, permitindo o acesso a recursos protegidos com mecanismos de expiração e renovação para maior segurança.**
 >
-> **Por sua vez, o token JWT é gerado após o login bem-sucedido, garantindo que o usuário tenha acesso a recursos protegidos, com mecanismos de expiração e renovação de token para maior segurança. A interface do frontend, desenvolvida em React.js, já está configurada para permitir uma experiência de usuário fluida, exibindo as telas de login e autenticação com o token JWT.**
+> **Atualmente, o frontend já gerencia a autenticação e autorização do usuário com 2FA e token JWT, proporcionando uma experiência fluida de login. A próxima fase do projeto é expandir para outras formas de 2FA, como `SMS` e `WhatsApp`.**
 >
-> **Embora a autenticação de dois fatores já esteja em funcionamento no backend, ela será integrada à interface do frontend em uma próxima fase do projeto. A meta é expandir a solução, permitindo que os usuários possam também utilizar outras formas de 2FA, como `SMS` e `WhatsApp`, além do `e-mail`.**
+> **Essa combinação de 2FA e JWT proporciona uma solução robusta e eficiente, oferecendo um sistema de login seguro e com boa escalabilidade.**
 
 ## 🎨 Frontend
 ### Interface do usuário
-As telas abaixo demonstram a navegação desde a inserção do nome de usuário e senha, passando pela autenticação do código de 6 dígitos, até o acesso à tela principal, com base nas permissões do usuário.
+O vídeo abaixo demonstram a navegação desde a inserção do nome de usuário e senha, passando pela autenticação do código de 6 dígitos, até o acesso à tela principal, com base nas permissões do usuário.
 
-![login](https://github.com/user-attachments/assets/9f0e33d1-a960-45e6-8dd8-a3f67ff17bb5)
-![auth](https://github.com/user-attachments/assets/5946d0af-5a8e-4861-8966-1fabe386f191)
-![book](https://github.com/user-attachments/assets/4c9926fd-23c0-4182-b302-616e8a0766c4)
+https://github.com/user-attachments/assets/32f615d2-a126-49f7-b972-a5e52679bb8a
 
 ## 🧑‍💻 Backend
 ### 1. Authentication-2FA
@@ -29,4 +27,4 @@ Após a validação do código, é gerada a autenticação utilizando um token J
 
 ***Observação:*** *Neste exemplo, o token tem uma duração de 3 minutos, configurado para facilitar a realização de testes.*
 
-![Image](https://github.com/user-attachments/assets/d119f497-9b17-4227-ace9-cd744f7a8fe3)
+![Image](https://github.com/user-attachments/assets/c718421c-0e7d-4431-a17c-bc534487a151)

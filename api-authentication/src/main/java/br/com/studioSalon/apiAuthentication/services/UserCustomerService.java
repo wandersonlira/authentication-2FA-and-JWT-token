@@ -60,9 +60,6 @@ public class UserCustomerService {
 
     public UserCustomer findUserByEmailAndCode(String email, String code) {
         UserCustomerConfirmationCode userConfirmationCode = this.findByEmailAndCode(email, code);
-        if (userConfirmationCode == null) {
-            throw new NoSuchElementException("E-mail or Code not found!");
-        }
         return Optional.ofNullable(userConfirmationCode.getUserCustomer())
                 .orElseThrow(() -> new NoSuchElementException("User not found for the E-mail and Code provided!"));
     }
@@ -73,24 +70,22 @@ public class UserCustomerService {
 
     private UserCustomerConfirmationCode findByEmailAndCode(String email, String code) {
         return Optional.ofNullable(userConfirmationCodeService.findByEmailAndCode(email, code))
-                .orElseThrow(() -> new NoSuchElementException("User or Code not found!"));
+                .orElseThrow(() -> new NoSuchElementException("E-mail or Code not found!"));
     }
 
     private void checksAndDeleteExistingCode(UserCustomer userCustomer) {
         if (userCustomer.getEmail() != null && userCustomer.getUserConfirmationCode() != null) {
             String email = userCustomer.getEmail();
             String confirmationCode = userCustomer.getUserConfirmationCode().getConfirmationCode();
-            if (isConfirmationCodeAlreadyExist(email, confirmationCode)) {
-                try {
-                    deleteCode(email, confirmationCode);
-                } catch (Exception e) {
-                    throw new RuntimeException("Error occurred while deleting confirmation code.", e);
-                }
+            try {
+                this.findByEmailAndCode(email, confirmationCode);
+                deleteCode(email, confirmationCode);
+            } catch (NoSuchElementException ignored) {
+
+            } catch (Exception exception) {
+                throw new RuntimeException("Error occurred while deleting confirmation code.", exception);
             }
         }
     }
 
-    private boolean isConfirmationCodeAlreadyExist(String email, String confirmationCode) {
-        return this.findByEmailAndCode(email, confirmationCode) != null;
-    }
 }

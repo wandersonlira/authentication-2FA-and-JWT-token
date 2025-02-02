@@ -29,6 +29,12 @@ public class AuthController {
     }
 
 
+    @GetMapping("/edit")
+    public ResponseEntity<?> edit() {
+        return ResponseEntity.ok().build();
+    }
+
+
     @GetMapping(value = "/validate")
     public ResponseEntity<?> validateConfirmationCode(
             @RequestParam String username, @RequestParam String code) {

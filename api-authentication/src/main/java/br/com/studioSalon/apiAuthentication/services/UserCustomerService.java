@@ -7,6 +7,7 @@ import br.com.studioSalon.apiAuthentication.model.UserCustomerConfirmationCode;
 import br.com.studioSalon.apiAuthentication.repositories.UserCustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -41,6 +42,7 @@ public class UserCustomerService {
         confirmationMethodEnum.sendConfirmation(userCustomerSaved, ctx);
     }
 
+    @Async
     public void sendCodeUser(String email) {
         UserCustomer userCustomer = repository.findUserCustomerByEmail(email);
         if (userCustomer == null) {

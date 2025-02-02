@@ -3,11 +3,13 @@ package br.com.studioSalon.apiAuthentication.services;
 
 import br.com.studioSalon.apiAuthentication.dto.security.AccountCredentialsDTO;
 import br.com.studioSalon.apiAuthentication.dto.security.TokenDTO;
+import br.com.studioSalon.apiAuthentication.model.User;
 import br.com.studioSalon.apiAuthentication.model.UserCustomer;
 import br.com.studioSalon.apiAuthentication.repositories.UserRepository;
 import br.com.studioSalon.apiAuthentication.security.jwt.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Service;
 import java.util.NoSuchElementException;
 
 @Service
+@EnableAsync
 public class AuthServices {
 
     private final AuthenticationManager authenticationManager;
@@ -43,6 +46,7 @@ public class AuthServices {
         var tokenResponse = new TokenDTO();
         if (user != null) {
             tokenResponse = jwtTokenProvider.refreshToken(refreshToken);
+            tokenResponse.setFullName(user.getFullName()); // --------  N E W   I M P L E M E N T A T I O N -----------
         } else {
             throw new UsernameNotFoundException("Username " + username + " not found!");
         }
@@ -68,7 +72,10 @@ public class AuthServices {
         }
     }
 
-    public TokenDTO validateConfirmationCode(String email, String code) {
+    public TokenDTO validateConfirmationCode(String username, String code) {
+        User user = getEmailOfUsername(username);
+        String email = user.getUserCustomer().getEmail();
+//        UserCustomer userCustomer = userCustomerService.findUserByEmailAndCode(email, code);
         UserCustomer userCustomer = userCustomerService.findUserByEmailAndCode(email, code);
         var tokenResponse = new TokenDTO();
         userCustomerService.codeIsValid(userCustomer.getUserConfirmationCode());
@@ -83,6 +90,7 @@ public class AuthServices {
             var tokenResponse = new TokenDTO();
             if (user != null) {
                 tokenResponse = jwtTokenProvider.createAccessToken(username, user.getRoles());
+                tokenResponse.setFullName(user.getFullName()); // --------  N E W   I M P L E M E N T A T I O N -----------
             } else {
                 throw new UsernameNotFoundException("Username " + username + "not found!");
             }
@@ -90,5 +98,9 @@ public class AuthServices {
         } catch (Exception e) {
             throw new BadCredentialsException("Invalid username/password supplied!");
         }
+    }
+
+    private User getEmailOfUsername(String username) {
+        return this.repository.findByUserName(username);
     }
 }

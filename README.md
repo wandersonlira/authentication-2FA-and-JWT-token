@@ -12,7 +12,7 @@
 ### Interface do usuário
 O vídeo abaixo demonstram a navegação desde a inserção do nome de usuário e senha, passando pela autenticação do código de 6 dígitos, até o acesso à tela principal, com base nas permissões do usuário.
 
-https://github.com/user-attachments/assets/32f615d2-a126-49f7-b972-a5e52679bb8a
+https://github.com/user-attachments/assets/a80ea520-02b1-4409-9e75-0ecc4d5e1daf
 
 ## 🧑‍💻 Backend
 ### 1. Authentication-2FA

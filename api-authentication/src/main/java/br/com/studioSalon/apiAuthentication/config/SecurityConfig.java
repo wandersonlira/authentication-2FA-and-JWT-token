@@ -58,9 +58,9 @@ public class SecurityConfig {
                 .authorizeHttpRequests(
                         authorizeHttpRequests -> authorizeHttpRequests
                                 // Permitir alguns endpoints públicos, como login ou refresh
-                                .requestMatchers("/auth/signin", "/auth/refresh/**", "/auth/validate").permitAll()
+                                .requestMatchers("/auth/signin", "/auth/refresh/**", "/auth/validate", "/api/books/v1/**").permitAll()
                                 // Outros endpoints requerem autenticação
-                                .requestMatchers("/auth/edit").authenticated()
+//                                .requestMatchers("/api/books/v1/**").authenticated()
                                 .requestMatchers("/users").denyAll()
                 )
                 .cors(cors -> {})

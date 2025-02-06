@@ -16,7 +16,7 @@ public class WebConfiguration {
                 registry.addMapping("/**")
                         .allowedOrigins("http://localhost:3000")
                         .allowedHeaders("Authorization", "Content-Type", "Accept")
-                        .allowedMethods("GET", "POST", "PUT");
+                        .allowedMethods("GET", "POST", "PUT", "DELETE");
             }
         };
     }

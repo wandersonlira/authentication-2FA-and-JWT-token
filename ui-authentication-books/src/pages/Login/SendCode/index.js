@@ -8,7 +8,7 @@ import logoAuth from '../../../assets/logoAuth.png';
 
 export default function SendCode() {
 
-    const localStorag_username = localStorage.getItem('localStorage_username');
+    const localStorag_username = localStorage.getItem('username');
     const [code, setCode] = useState('');
     const navigate = useNavigate();
 
@@ -33,8 +33,10 @@ export default function SendCode() {
                     code: data.code 
                 }          
             });
-            localStorage.setItem('localStorage_fullName', response.data.fullName);
+            localStorage.setItem('fullName', response.data.fullName);
             localStorage.setItem('accessToken', response.data.accessToken);
+            localStorage.setItem('refreshToken', response.data.refreshToken);
+            localStorage.removeItem('username');
             navigate('/book')
         } catch (error) {
             alert('Falha no login. Tente novamente!')

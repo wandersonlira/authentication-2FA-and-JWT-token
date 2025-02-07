@@ -8,21 +8,19 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
 
-public class BookDTO implements Serializable {
+public class BookRequestDTO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    private Long id;
     private String author;
     private Date launchDate;
     private Double price;
     private String title;
 
 
-    public BookDTO() {}
+    public BookRequestDTO() {}
 
-    public BookDTO(Long id, String author, Date launchDate, Double price, String title ) {
-        this.id = id;
+    public BookRequestDTO(String author, Date launchDate, Double price, String title ) {
         this.author = author;
         this.launchDate = launchDate;
         this.price = price;
@@ -37,20 +35,12 @@ public class BookDTO implements Serializable {
         );
     }
 
-    public BookDTO toView(Book book) {
-        return new BookDTO(book.getId(), book.getAuthor(),
+/*    public BookRequestDTO toView(Book book) {
+        return new BookRequestDTO(book.getId(), book.getAuthor(),
                 book.getLaunchDate(), book.getPrice(), book.getTitle());
-    }
+    }*/
 
 
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getTitle() {
         return title;
@@ -90,17 +80,17 @@ public class BookDTO implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        BookDTO bookDTO = (BookDTO) o;
-        return Objects.equals(id, bookDTO.id) && Objects.equals(author, bookDTO.author) && Objects.equals(launchDate, bookDTO.launchDate) && Objects.equals(price, bookDTO.price) && Objects.equals(title, bookDTO.title);
+        BookRequestDTO that = (BookRequestDTO) o;
+        return Objects.equals(author, that.author) && Objects.equals(launchDate, that.launchDate) && Objects.equals(price, that.price) && Objects.equals(title, that.title);
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hashCode(id);
-        result = 31 * result + Objects.hashCode(author);
+        int result = Objects.hashCode(author);
         result = 31 * result + Objects.hashCode(launchDate);
         result = 31 * result + Objects.hashCode(price);
         result = 31 * result + Objects.hashCode(title);
         return result;
     }
+
 }

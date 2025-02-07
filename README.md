@@ -1,3 +1,7 @@
+
+
+
+
 # Authentication-2FA-and-JWT-token
 > [!NOTE]
 > **Este projeto implementar um sistema de autenticação, combinando autenticação de dois fatores (2FA) com tokens JWT para oferecer um login seguro e eficiente. A arquitetura do sistema envolve tanto a parte backend quanto o frontend, sendo o backend responsável pela geração e validação do token JWT e pela implementação do 2FA, enquanto o frontend, desenvolvido em React.js, lida com a visualização da interface.**
@@ -12,7 +16,7 @@
 ### Interface do usuário
 O vídeo abaixo demonstram a navegação desde a inserção do nome de usuário e senha, passando pela autenticação do código de 6 dígitos, até o acesso à tela principal, com base nas permissões do usuário.
 
-https://github.com/user-attachments/assets/5e875b65-ce1b-4c4a-b97d-94e2c0ffe8e3
+https://github.com/user-attachments/assets/7a3b95da-9f80-4af3-b8be-852e0f432a9c
 
 
 ## 🧑‍💻 Backend

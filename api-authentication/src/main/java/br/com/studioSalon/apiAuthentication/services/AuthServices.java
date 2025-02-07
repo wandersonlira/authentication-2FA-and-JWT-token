@@ -16,7 +16,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.NoSuchElementException;
 
 @Service
 @EnableAsync
@@ -46,7 +45,7 @@ public class AuthServices {
         var tokenResponse = new TokenDTO();
         if (user != null) {
             tokenResponse = jwtTokenProvider.refreshToken(refreshToken);
-            tokenResponse.setFullName(user.getFullName()); // --------  N E W   I M P L E M E N T A T I O N -----------
+            tokenResponse.setFullName(user.getFullName());
         } else {
             throw new UsernameNotFoundException("Username " + username + " not found!");
         }
@@ -75,7 +74,6 @@ public class AuthServices {
     public TokenDTO validateConfirmationCode(String username, String code) {
         User user = getEmailOfUsername(username);
         String email = user.getUserCustomer().getEmail();
-//        UserCustomer userCustomer = userCustomerService.findUserByEmailAndCode(email, code);
         UserCustomer userCustomer = userCustomerService.findUserByEmailAndCode(email, code);
         var tokenResponse = new TokenDTO();
         userCustomerService.codeIsValid(userCustomer.getUserConfirmationCode());
@@ -90,7 +88,7 @@ public class AuthServices {
             var tokenResponse = new TokenDTO();
             if (user != null) {
                 tokenResponse = jwtTokenProvider.createAccessToken(username, user.getRoles());
-                tokenResponse.setFullName(user.getFullName()); // --------  N E W   I M P L E M E N T A T I O N -----------
+                tokenResponse.setFullName(user.getFullName());
             } else {
                 throw new UsernameNotFoundException("Username " + username + "not found!");
             }

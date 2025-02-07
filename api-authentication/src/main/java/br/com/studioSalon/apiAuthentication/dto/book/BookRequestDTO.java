@@ -35,11 +35,6 @@ public class BookRequestDTO implements Serializable {
         );
     }
 
-/*    public BookRequestDTO toView(Book book) {
-        return new BookRequestDTO(book.getId(), book.getAuthor(),
-                book.getLaunchDate(), book.getPrice(), book.getTitle());
-    }*/
-
 
 
     public String getTitle() {

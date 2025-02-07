@@ -57,10 +57,8 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(
                         authorizeHttpRequests -> authorizeHttpRequests
-                                // Permitir alguns endpoints públicos, como login ou refresh
-                                .requestMatchers("/auth/signin", "/auth/refresh/**", "/auth/validate", "/api/books/v1/**").permitAll()
-                                // Outros endpoints requerem autenticação
-//                                .requestMatchers("/api/books/v1/**").authenticated()
+                                .requestMatchers("/auth/signin", "/auth/refresh/**", "/auth/validate").permitAll()
+                                .requestMatchers( "/api/books/v1/**").authenticated()
                                 .requestMatchers("/users").denyAll()
                 )
                 .cors(cors -> {})

@@ -31,12 +31,6 @@ public class BookResponseDTO implements Serializable {
 
 
 
-    public Book toEntity() {
-        return new Book(
-                null, this.author, this.launchDate, this.price, this.title
-        );
-    }
-
     public BookResponseDTO toView(Book book) {
         return new BookResponseDTO(book.getId(), book.getAuthor(),
                 book.getLaunchDate(), book.getPrice(), book.getTitle());

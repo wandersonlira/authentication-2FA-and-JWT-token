@@ -23,7 +23,7 @@ public class UserCustomerConfirmationCodeService {
         UserCustomerConfirmationCode userCustomerConfirmationCode =
                 new UserCustomerConfirmationCode(newConfirmationCode, userCustomer);
         repository.save(userCustomerConfirmationCode);
-        userCustomer.setUserConfirmationCode(userCustomerConfirmationCode); // Seta o código gerado ao userCustomer
+        userCustomer.setUserConfirmationCode(userCustomerConfirmationCode);
     }
 
     private String generateConfirmationCode() {

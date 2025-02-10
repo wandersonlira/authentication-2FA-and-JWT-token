@@ -42,7 +42,6 @@ export default function Book() {
 
 
     async function editBook(id) {
-        // e.preventDefault();
         try {
             navigate(`new/${id}`)
         } catch (error) {
@@ -88,7 +87,7 @@ export default function Book() {
                         <strong>Preço:</strong>
                         <p>{Intl.NumberFormat('pt-BR', {style: 'currency', currency: 'BRL'}).format(book.price)}</p>
                         <strong>Data de lançamento:</strong>
-                        <p>{Intl.DateTimeFormat('pt-BR').format(new Date(book.launchDate))}</p>
+                        <p>{Intl.DateTimeFormat('pt-BR', { timeZone: 'UTC' }).format(new Date(book.launchDate))}</p>
 
                         <button type="button" onClick={() => editBook(book.id)}>
                             <FiEdit size={20} color="#A73D40" />
@@ -101,4 +100,5 @@ export default function Book() {
             </ul>
         </div>
     );
+
 }
